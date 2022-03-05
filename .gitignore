@@ -2,7 +2,6 @@ build/
 .vscode/
 
 # CubeMX generated
-Core/
 Drivers/
 .mxproject
 *.s

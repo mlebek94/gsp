@@ -23,6 +23,6 @@ sudo apt install make build-essential cmake git gcc-arm-none-eabi gcc-arm-none-e
 2. Open terminal in project's root and go to WSL:
 ```
 wsl
-make                # compile
+make -j8            # compile
 make flashTarget    # flash board
 ```

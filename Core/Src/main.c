@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "led.hpp"
 
 /* USER CODE END Includes */
 
@@ -85,7 +86,18 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+  led_config_t led3_config{LD3_GPIO_Port, LD3_Pin, true};
+  led_config_t led4_config{LD4_GPIO_Port, LD4_Pin, false};
+  led_config_t led5_config{LD5_GPIO_Port, LD5_Pin, true};
+  led_config_t led6_config{LD6_GPIO_Port, LD6_Pin, false};
 
+  Led led3{led3_config};
+  Led led4{led4_config};
+  Led led5{led5_config};
+  Led led6{led6_config};
+
+  Led leds[4] = {led3, led4, led5, led6};
+  int count{};
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -93,10 +105,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-    HAL_Delay(500);
-    HAL_GPIO_TogglePin(LD4_GPIO_Port, LD4_Pin);
-    HAL_Delay(500);
+    for(auto l: leds) {
+      l.toggle();
+      HAL_Delay(count++);
+    }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

@@ -69,13 +69,13 @@ PREFIX = arm-none-eabi-
 # The gcc compiler bin path can be either defined in make command via GCC_PATH variable (> make GCC_PATH=xxx)
 # either it can be added to the PATH environment variable.
 ifdef GCC_PATH
-CC = $(GCC_PATH)/$(PREFIX)gcc
-AS = $(GCC_PATH)/$(PREFIX)gcc -x assembler-with-cpp
+CC = $(GCC_PATH)/$(PREFIX)g++
+AS = $(GCC_PATH)/$(PREFIX)g++ -x assembler-with-cpp
 CP = $(GCC_PATH)/$(PREFIX)objcopy
 SZ = $(GCC_PATH)/$(PREFIX)size
 else
-CC = $(PREFIX)gcc
-AS = $(PREFIX)gcc -x assembler-with-cpp
+CC = $(PREFIX)g++
+AS = $(PREFIX)g++ -x assembler-with-cpp
 CP = $(PREFIX)objcopy
 SZ = $(PREFIX)size
 endif
@@ -116,7 +116,8 @@ C_INCLUDES =  \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
--IDrivers/CMSIS/Include
+-IDrivers/CMSIS/Include \
+-Iapp/led
 
 
 # compile gcc flags
@@ -130,7 +131,7 @@ endif
 
 
 # Generate dependency information
-CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
+CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -fno-exceptions
 
 
 #######################################
@@ -160,6 +161,9 @@ vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
+	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.cpp=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@

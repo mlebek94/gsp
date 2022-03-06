@@ -86,16 +86,18 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  led_config_t led3_config{LD3_GPIO_Port, LD3_Pin};
-  led_config_t led4_config{LD4_GPIO_Port, LD4_Pin};
-  led_config_t led5_config{LD5_GPIO_Port, LD5_Pin};
-  led_config_t led6_config{LD6_GPIO_Port, LD6_Pin};
+  led_config_t led3_config{LD3_GPIO_Port, LD3_Pin, true};
+  led_config_t led4_config{LD4_GPIO_Port, LD4_Pin, false};
+  led_config_t led5_config{LD5_GPIO_Port, LD5_Pin, true};
+  led_config_t led6_config{LD6_GPIO_Port, LD6_Pin, false};
+
   Led led3{led3_config};
   Led led4{led4_config};
   Led led5{led5_config};
   Led led6{led6_config};
 
   Led leds[4] = {led3, led4, led5, led6};
+  int count{};
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,16 +105,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    for(uint8_t i = 0; i < 4; ++i) {
-      leds[i].toggle();
-      HAL_Delay(100);
+    for(auto l: leds) {
+      l.toggle();
+      HAL_Delay(count++);
     }
-    // led3.toggle();
-    // HAL_Delay(100);
-    // led5.toggle();
-    // HAL_Delay(100);
-    // HAL_GPIO_TogglePin(LD4_GPIO_Port, LD4_Pin);
-    // HAL_Delay(100);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

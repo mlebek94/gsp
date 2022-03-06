@@ -5,11 +5,14 @@
 struct led_config_t {
     GPIO_TypeDef* port;
     uint16_t pin;
+    bool default_state{false};
 };
 
 class Led {
 public:
-    Led(const led_config_t& cfg):config{cfg}{}
+    Led(const led_config_t& cfg) : config{cfg} {
+        config.default_state ? on() : off();
+    }
 
     void on() {
         HAL_GPIO_WritePin(config.port, config.pin, GPIO_PIN_SET);
@@ -26,6 +29,5 @@ public:
         return HAL_GPIO_ReadPin(config.port, config.pin) == GPIO_PIN_SET;
     }
 private:
-    bool state{};
     const led_config_t& config;
 };

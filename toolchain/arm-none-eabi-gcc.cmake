@@ -22,3 +22,30 @@ set(CMAKE_SIZE_UTIL ${TOOLCHAIN_PREFIX}size)
 set(CMAKE_EXECUTABLE_SUFFIX_ASM ".elf")
 set(CMAKE_EXECUTABLE_SUFFIX_C ".elf")
 set(CMAKE_EXECUTABLE_SUFFIX_CXX ".elf")
+
+function(print_size target_ )
+    add_custom_command(TARGET ${target_}
+        POST_BUILD
+        COMMAND arm-none-eabi-size ${target_}${CMAKE_EXECUTABLE_SUFFIX_CXX}
+    )
+endfunction()
+
+function(create_hex target_ )
+    add_custom_command(TARGET ${target_}
+        POST_BUILD
+        COMMAND arm-none-eabi-objcopy -O ihex ${target_}${CMAKE_EXECUTABLE_SUFFIX_CXX} ${target_}.hex
+        COMMAND arm-none-eabi-objcopy -O binary ${target_}${CMAKE_EXECUTABLE_SUFFIX_CXX} ${target_}.bin
+    )
+endfunction()
+
+function(build_elf target_ sources_ includes_ libraries_ flags_)
+    add_executable(${target_})
+
+    target_sources(${target_} PRIVATE ${sources_})
+    target_include_directories(${target_} PUBLIC ${includes_})
+    target_link_libraries(${target_} PRIVATE ${libraries_})
+    target_link_options(${target_} PRIVATE ${flags_})
+
+    print_size(${target_})
+    create_hex(${target_})
+endfunction()

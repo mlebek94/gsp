@@ -2,19 +2,19 @@ cmake_minimum_required(VERSION 3.10)
 
 project(guitar-signal-processor VERSION 0.0.1 LANGUAGES CXX C ASM)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/toolchain/arm-none-eabi-g++.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/toolchain/arm-none-eabi-gcc.cmake)
 
 set(BOARD STM32F411E-DISCO)
 
 add_subdirectory(vendor)
-add_subdirectory(drivers)
-# add_subdirectory(generated)
+add_subdirectory(lib)
+add_subdirectory(app)
 
-set(EXECUTABLE ${PROJECT_NAME}.out)
+set(OUT ${PROJECT_NAME}.out)
 
-add_executable(${EXECUTABLE} )
+add_executable(${OUT} )
 
-target_sources(${EXECUTABLE} PRIVATE
+target_sources(${OUT} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/generated/Core/Src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generated/Core/Src/gpio.c
     ${CMAKE_CURRENT_SOURCE_DIR}/generated/Core/Src/stm32f4xx_hal_msp.c
@@ -23,60 +23,25 @@ target_sources(${EXECUTABLE} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/generated/startup_stm32f411xe.s
 )
 
-target_include_directories(${EXECUTABLE} PUBLIC 
+target_include_directories(${OUT} PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/generated/Core/Inc
 )
 
-target_compile_definitions(${EXECUTABLE} PRIVATE
-    -DUSE_HAL_DRIVER
-    -DSTM32F411xE
-    -D${BOARD}
-)
+target_link_libraries(${OUT} PRIVATE f4_drivers led)
 
-target_link_libraries(${EXECUTABLE} PRIVATE f4_drivers led)
-
-target_compile_options(${EXECUTABLE} PRIVATE
-    -mcpu=cortex-m4
-    -mthumb
-    -mfpu=fpv4-sp-d16
-    -mfloat-abi=hard
-
-    -fdata-sections
-    -ffunction-sections
-
-    -Wall
-
-    $<$<CONFIG:Debug>:-Og>
-    -gdwarf-2
-    -fno-exceptions
-)
-
-target_link_options(${EXECUTABLE} PRIVATE
+target_link_options(${OUT} PRIVATE
     -T${CMAKE_SOURCE_DIR}/generated/STM32F411VETx_FLASH.ld
-    -mcpu=cortex-m4
-    -mthumb
-    -mfpu=fpv4-sp-d16
-    -mfloat-abi=hard
-
-    -specs=nano.specs
-
-    -lc
-    -lm
-    -lnosys
-
     -Wl,-Map=${CMAKE_CURRENT_SOURCE_DIR}/build/${PROJECT_NAME}.map,--cref
-    -Wl,--gc-sections
-    -Wl,--print-memory-usage
 )
 
 
-# Print executable size
-add_custom_command(TARGET ${EXECUTABLE}
+# Print OUT size
+add_custom_command(TARGET ${OUT}
         POST_BUILD
-        COMMAND arm-none-eabi-size ${EXECUTABLE})
+        COMMAND arm-none-eabi-size ${OUT})
 
 # Create hex file
-add_custom_command(TARGET ${EXECUTABLE}
+add_custom_command(TARGET ${OUT}
         POST_BUILD
-        COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE} ${PROJECT_NAME}.hex
-        COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE} ${PROJECT_NAME}.bin)
+        COMMAND arm-none-eabi-objcopy -O ihex ${OUT} ${PROJECT_NAME}.hex
+        COMMAND arm-none-eabi-objcopy -O binary ${OUT} ${PROJECT_NAME}.bin)

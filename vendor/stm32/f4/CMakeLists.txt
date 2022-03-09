@@ -1,15 +1,13 @@
-# add_subdirectory(CMSIS)
-# add_subdirectory(STM32F4xx_HAL_Driver)
 set(NAME f4_drivers)
 
 add_library(${NAME})
+
 target_include_directories(${NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/STM32F4xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/STM32F4xx_HAL_Driver/Inc/Legacy
     ${CMAKE_CURRENT_SOURCE_DIR}/
     ${CMAKE_CURRENT_SOURCE_DIR}/CMSIS/Device/ST/STM32F4xx/Include
     ${CMAKE_CURRENT_SOURCE_DIR}/CMSIS/Include
-    
 )
 
 target_sources(${NAME} PUBLIC
@@ -41,27 +39,27 @@ target_compile_options(${NAME} PUBLIC
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
 
-    -fdata-sections
-    -ffunction-sections
+    # -fdata-sections
+    # -ffunction-sections
 
-    -Wall
+    # -Wall
 
-    $<$<CONFIG:Debug>:-Og>
-    -gdwarf-2
-    -fno-exceptions
+    # $<$<CONFIG:Debug>:-Og>
+    # -gdwarf-2
+    # -fno-exceptions
 )
 
-target_link_options(${NAME} PRIVATE
+target_link_options(${NAME} PUBLIC
     -mcpu=cortex-m4
     -mthumb
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
 
-    -specs=nano.specs
+    # -specs=nano.specs
 
-    -lc
-    -lm
-    -lnosys
+    # -lc
+    # -lm
+    # -lnosys
 
-    -Wl,--gc-sections
+    # -Wl,--gc-sections
 )

@@ -37,7 +37,7 @@ if [ $skip_build == "false" ]; then
     mkdir -p ${BUILD_DIR}
 
     cd ${BUILD_DIR} && cmake ..
-    make -j${nproc}
+    make -j16
 
     if [ $? -eq 0 ]; then
         echo "Build succesful"
@@ -51,3 +51,5 @@ if [ $flash == "true" ]; then
 	ST-LINK_CLI.exe -c SWD FREQ=4000 -P ./build/guitar-signal-processor.bin 0x08000000 -HardRst
 fi
 
+# arm-none-eabi-size ${BUILD_DIR}/guitar-signal-processor.elf
+# arm-none-eabi-size ${BUILD_DIR}/guitar-signal-processor.out

@@ -64,6 +64,7 @@ Led led4{led4_config};
 Led led5{led5_config};
 Led led6{led6_config};
 Led leds[4] = {led3, led4, led5, led6};
+// Led leds[3] = {led3, led5, led6};
 /* USER CODE END 0 */
 
 /**

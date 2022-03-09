@@ -26,3 +26,11 @@ wsl
 make -j8            # compile
 make flashTarget    # flash board
 ```
+
+## Troubleshooting
+
+Windows might add carriage return characters in open files. If that is as issue run:
+
+```
+sed -i -e 's/\r$//' <file name>
+```

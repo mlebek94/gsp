@@ -2,7 +2,7 @@ build/
 .vscode/
 
 # CubeMX generated
-Drivers/
-.mxproject
-*.s
-*ld
+generated/Drivers/
+generated/.mxproject
+generated/*.s
+generated/*ld

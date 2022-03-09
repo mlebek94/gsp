@@ -10,8 +10,7 @@ add_subdirectory(vendor)
 add_subdirectory(lib)
 add_subdirectory(app)
 
-set(OUT ${PROJECT_NAME}.out)
-
+set(OUT ${PROJECT_NAME})
 add_executable(${OUT} )
 
 target_sources(${OUT} PRIVATE
@@ -34,14 +33,13 @@ target_link_options(${OUT} PRIVATE
     -Wl,-Map=${CMAKE_CURRENT_SOURCE_DIR}/build/${PROJECT_NAME}.map,--cref
 )
 
-
 # Print OUT size
 add_custom_command(TARGET ${OUT}
         POST_BUILD
-        COMMAND arm-none-eabi-size ${OUT})
+        COMMAND arm-none-eabi-size ${OUT}${CMAKE_EXECUTABLE_SUFFIX_CXX})
 
 # Create hex file
 add_custom_command(TARGET ${OUT}
         POST_BUILD
-        COMMAND arm-none-eabi-objcopy -O ihex ${OUT} ${PROJECT_NAME}.hex
-        COMMAND arm-none-eabi-objcopy -O binary ${OUT} ${PROJECT_NAME}.bin)
+        COMMAND arm-none-eabi-objcopy -O ihex ${OUT}${CMAKE_EXECUTABLE_SUFFIX_CXX} ${PROJECT_NAME}.hex
+        COMMAND arm-none-eabi-objcopy -O binary ${OUT}${CMAKE_EXECUTABLE_SUFFIX_CXX} ${PROJECT_NAME}.bin)

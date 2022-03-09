@@ -50,6 +50,3 @@ if [ $flash == "true" ]; then
     cd ${SCRIPT_DIR}
 	ST-LINK_CLI.exe -c SWD FREQ=4000 -P ./build/guitar-signal-processor.bin 0x08000000 -HardRst
 fi
-
-# arm-none-eabi-size ${BUILD_DIR}/guitar-signal-processor.elf
-# arm-none-eabi-size ${BUILD_DIR}/guitar-signal-processor.out

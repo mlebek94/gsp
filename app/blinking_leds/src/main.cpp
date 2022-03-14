@@ -23,7 +23,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "led.hpp"
-
+#include "i2s.h"
+#include "arr.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -90,12 +91,13 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  MX_I2S3_Init();
   /* USER CODE END SysInit */
  
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+
 
   int count{};
   /* USER CODE END 2 */
@@ -105,6 +107,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+    HAL_I2S_Transmit(&hi2s3, (uint16_t*) arr, sizeof(arr), 3000);
     for(auto l: leds) {
       l.toggle();
       HAL_Delay(count++%100);

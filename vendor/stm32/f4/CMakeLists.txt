@@ -26,6 +26,8 @@ target_sources(${NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
     ${CMAKE_CURRENT_SOURCE_DIR}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
     ${CMAKE_CURRENT_SOURCE_DIR}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2s.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2s_ex.c
 )
 
 target_compile_definitions(${NAME} PUBLIC
@@ -38,15 +40,6 @@ target_compile_options(${NAME} PUBLIC
     -mthumb
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
-
-    # -fdata-sections
-    # -ffunction-sections
-
-    # -Wall
-
-    # $<$<CONFIG:Debug>:-Og>
-    # -gdwarf-2
-    # -fno-exceptions
 )
 
 target_link_options(${NAME} PUBLIC
@@ -54,12 +47,4 @@ target_link_options(${NAME} PUBLIC
     -mthumb
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
-
-    # -specs=nano.specs
-
-    # -lc
-    # -lm
-    # -lnosys
-
-    # -Wl,--gc-sections
 )
